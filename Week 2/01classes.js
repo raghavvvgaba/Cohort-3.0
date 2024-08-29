@@ -19,8 +19,4 @@ console.log(ans);
 rect.paint()
 
 
-//---------YOU CAN TOTALLY DO ALL OF THIS WITHOUT USING CLASSES
-let rect3{
-    w: 10,
-
-}
+//---------YOU CAN TOTALLY DO ALL OF THIS WITHOUT USING CLASSES BY JUST USING OBJECTS
