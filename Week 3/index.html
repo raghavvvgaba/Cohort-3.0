@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+</head>
+
+<body>
+    <div class="content">
+        <h2>To Do list</h2>
+        <h4>1. Go to class</h4>
+        <h4>2. Sleep in class</h4>
+    </div>
+
+    <input type="text" placeholder="Add your to-do here">
+    <button onclick="addToDo()">Add</button>
+
+    <script>
+        function addToDo() {
+            const inputElement = document.querySelector("input").value;
+            const spanEle = document.createElement("span");
+            const deleteButton = document.createElement("button");
+            const divEle = document.createElement("div");
+            spanEle.innerHTML = inputElement;
+            deleteButton.innerHTML = "Delete"
+            divEle.appendChild(spanEle);
+            divEle.appendChild(deleteButton);
+            document.querySelector(".content").appendChild(divEle);
+        }
+    
+    </script>
+</body>
+
+</html>
