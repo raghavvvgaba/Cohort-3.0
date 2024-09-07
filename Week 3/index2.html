@@ -26,7 +26,17 @@
             render();
         }
         function render(){
-            
+            for(let i = 0;i <todos.length; i++){
+                const todo = todos[i];
+                const div = document.createElement("div");
+                const listEle = document.createElement("h4");
+                listEle.innerHTML = todo.title;
+                const deleteEle = document.createElement("button");
+                deleteEle.innerHTML = "Delete";
+                div.append(listEle);
+                div.append(deleteEle);
+                document.querySelector("body").appendChild(div);
+            }
         }
     </script>
 </body>
