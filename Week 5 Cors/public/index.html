@@ -1,0 +1,19 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function getSum() {
+            let a = document.getElementById("a").value;
+            let b = document.getElementById("b").value;
+            const response = await axios.post('http://localhost:3000/sum', {
+                a: a,
+                b: b
+            });
+            console.log(response.data);
+        }
+    </script>
+</head>
+<body>
+    <input id="a" placeholder="Enter 1st number"></input>
+    <input id="b" placeholder="Enter 2nd number"></input>
+    <button onclick="getSum()">Find Answer</button>
+</body>
