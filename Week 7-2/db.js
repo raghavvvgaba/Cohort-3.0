@@ -3,7 +3,7 @@ const ObjectId = mongoose.ObjectId;
 const Schema = mongoose.Schema;
 
 const User = new Schema({
-    email: String, 
+    email: {type: String, unique: true}, 
     password: String,
     name: String
 })
@@ -18,11 +18,11 @@ const UserModel = mongoose.model('users', User); //users collection ke andar Use
 const ToDoModel = mongoose.model('todos', Todo); //todos collection ke andar Todo schema
 
 
-UserModel.create({
-    email: "devggaba@gmail.com",
-    password: "dev",
-    name: "Dev G Gaba"
-})
+// UserModel.create({
+//     email: "devggaba@gmail.com",
+//     password: "dev",
+//     name: "Dev G Gaba"
+// })
 
 module.exports = {
     UserModel: UserModel,
