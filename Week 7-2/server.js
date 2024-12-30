@@ -7,7 +7,7 @@ const JWT_SECRET = "asdfhioran!231"
 const { z } = require('zod');
 const port = 3000
 
-mongoose.connect("mongodb+srv://anonymous090304:Z8TRlCr6s6EEndQd@cluster0.lb9fc.mongodb.net/todo-raghav-22");
+mongoose.connect("");
 const app = express();
 app.use(express.json()); 
 
