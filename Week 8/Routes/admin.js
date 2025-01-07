@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { AdminModel } = require('/Users/nidhi/OneDrive/Desktop/Raghav/Cohort 3.0/Week 8/db');
 const { z } = require('zod');
-const JWT_ADMIN_SECRET = "abipje1341";
+const { CourseModel } = require('../db');
+const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET;
 
 function AdminAuth(req, res, next){
     const token = req.headers.token;
@@ -111,15 +112,39 @@ adminRouter.post('/create-course', AdminAuth, async function(req,res){
     }
 });
 
-adminRouter.put('/modify-course',function(req,res){
+adminRouter.put('/modify-course',AdminAuth, async function(req,res){
     const AdminId = req.userId;
-    const { title, price, description, imageURL } = req.body;
-    
+    const { title, price, description, imageURL, courseId } = req.body;
+    try {
+        await CourseModel.UpdateOne({
+            _id: courseId, 
+            creatorId: AdminId
+        },{
+            title: title,
+            price: price,
+            description: description,
+            imageURL: imageURL,
+        })
+        res.json({
+            message: "Course Updated",
+            courseId: course._id
+        })
+    }
+    catch(e){
+        console.log(e);
+        res.status(403).json({
+            message: "Something went wrong in updating the course"
+        })
+    }
 
 });
 
-adminRouter.get('/get-course',function(req,res){
-
+adminRouter.get('/get-course',AdminAuth, async function(req,res){
+    const AdminId = req.userId;
+    const course = await CourseModel.find({
+        creatorId: AdminId
+    });
+    
 });
 
 module.exports = {

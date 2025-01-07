@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { UserModel } = require('/Users/nidhi/OneDrive/Desktop/Raghav/Cohort 3.0/Week 8/db');
 const { z } = require('zod');
-const JWT_USER_SECRET = "hsdissjfh148";
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET;
 
 function UserAuth(req, res, next){
     const token = req.headers.token;
