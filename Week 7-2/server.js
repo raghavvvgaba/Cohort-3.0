@@ -78,7 +78,6 @@ app.post('/signin', async function(req,res){
 
     const passwordMatch = await bcrypt.compare(password, response.password);  //compare the password given by the user to the password found in the db (i.e the hashed password)
 
-
     if(passwordMatch){
         const token = jwt.sign({
             id: response._id 
