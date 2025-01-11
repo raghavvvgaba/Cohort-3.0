@@ -4,27 +4,15 @@
 // OR 
 
 const { Router } = require('express');      //both are fine
-
 const userRouter  = Router();       //calling the function Router, it isn't a class
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { UserModel } = require('/Users/nidhi/OneDrive/Desktop/Raghav/Cohort 3.0/Week 8/db');
+const { UserModel, CourseModel } = require('../db');
 const { z } = require('zod');
-const JWT_USER_SECRET = process.env.JWT_USER_SECRET;
-
-function UserAuth(req, res, next){
-    const token = req.headers.token;
-    const decodedData = jwt.verify(token, JWT_USER_SECRET);
-    if(decodedData){
-        req.userId = decodedData._id;
-        next();
-    }
-    else{
-        res.status(403).json({
-            message: "Incorrect credentials"
-        })
-    }
-}
+const { PurchaseModel } = require('../db');
+require('dotenv').config()
+const { UserAuth } = require("../middleware/user")
+const { JWT_USER_SECRET } = require("../config")
 
 
 userRouter.post('/signup', async function(req,res){
@@ -92,7 +80,48 @@ userRouter.post('/login', async function(req,res){
     }
 });
 
-userRouter.get('/purchases',function(req,res){
+userRouter.post('/purchase', UserAuth, async function(req,res){
+    const userId = req.userId;
+    const courseId = req.body.courseId;
+    const courseexist = await PurchaseModel.find({
+        courseId
+    });
+    const course = courseId.toString
+    if(courseexist){
+        try{
+            const addPurchase = await PurchaseModel.create({
+                userId: userId,
+                courseId: courseId
+            })
+            res.json({
+                message: "You have bought the course"
+            })
+        }
+        catch(e){
+            res.status(403).json({
+                message: "Course couldn't be created"
+            })
+        }
+    }
+    else{
+        res.json({
+            message: "Course doesn't exist"
+        })
+    }
+});
+
+userRouter.get('/my-purchases', UserAuth, async function(req,res){
+    const userId = req.userId;
+    const purchases = await PurchaseModel.find({
+        userId
+    });
+
+    const courseData = await CourseModel.find({
+        _id: purchases.map(x => x._id)
+    })
+    res.json({
+        purchases
+    })
 
 });
 

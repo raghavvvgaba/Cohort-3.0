@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { setThePassword } = require('whatwg-url');
-const ObjectId = mongoose.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
 
 
@@ -21,7 +21,7 @@ const Admin = new Schema({
 })
 
 const Course = new Schema({
-    _id: ObjectId,
+    // _id: ObjectId,
     title: String,
     price: Number,
     description: String,
@@ -30,9 +30,9 @@ const Course = new Schema({
 })
 
 const Purchases = new Schema({
-    _id : ObjectId,
-    courseId: ObjectId,
-    userId: ObjectId
+    // _id : ObjectId,
+    userId: ObjectId,
+    courseId: ObjectId
 })
 
 const UserModel = mongoose.model('users', User);

@@ -1,27 +1,13 @@
 const { Router } = require('express');
 const adminRouter = Router();
-
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { AdminModel } = require('/Users/nidhi/OneDrive/Desktop/Raghav/Cohort 3.0/Week 8/db');
 const { z } = require('zod');
 const { CourseModel } = require('../db');
-const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET;
-
-function AdminAuth(req, res, next){
-    const token = req.headers.token;
-    const decodedData = jwt.verify(token, JWT_ADMIN_SECRET);
-    if(decodedData){
-        req.userId = decodedData._id;
-        next();
-    }
-    else{
-        res.status(403).json({
-            message: "Incorrect credentials"
-        })
-    }
-}
-
+const { AdminAuth } = require("../middleware/admin");
+const { JWT_ADMIN_SECRET } = require("../config")
+require('dotenv').config()
 
 adminRouter.post('/signup', async function(req,res){
     const requiredBody = z.object({
@@ -71,7 +57,8 @@ adminRouter.post('/login', async function(req,res){
         })
         return;
     }
-    const passwordMatch = await bcrypt.compare(password, response.password);
+    console.log(response._id);
+    const passwordMatch = bcrypt.compare(password, response.password);
     if(passwordMatch){
         const token = jwt.sign({
             id: response._id
@@ -87,12 +74,11 @@ adminRouter.post('/login', async function(req,res){
     }
 });
 
-
 adminRouter.post('/create-course', AdminAuth, async function(req,res){
     const AdminId = req.userId;
     const { title, price, description, imageURL } = req.body;
     try {
-        await CourseModel.create({
+        const course = await CourseModel.create({
             title: title,
             price: price,
             description: description,
@@ -116,7 +102,7 @@ adminRouter.put('/modify-course',AdminAuth, async function(req,res){
     const AdminId = req.userId;
     const { title, price, description, imageURL, courseId } = req.body;
     try {
-        await CourseModel.UpdateOne({
+        const course = await CourseModel.updateOne({
             _id: courseId, 
             creatorId: AdminId
         },{
@@ -144,7 +130,9 @@ adminRouter.get('/get-course',AdminAuth, async function(req,res){
     const course = await CourseModel.find({
         creatorId: AdminId
     });
-    
+    res.json({
+        course
+    }) 
 });
 
 module.exports = {
