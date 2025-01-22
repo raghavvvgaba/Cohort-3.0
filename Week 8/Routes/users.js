@@ -57,9 +57,9 @@ userRouter.post('/login', async function(req,res){
     const response = await UserModel.findOne({
         email: email
     });
-    console.log(response.password);
+    console.log(response);
     if(!response){
-        res.status.json({
+        res.status(403).json({
             message: "User does not exist"
         })
         return;
@@ -80,35 +80,6 @@ userRouter.post('/login', async function(req,res){
     }
 });
 
-userRouter.post('/purchase', UserAuth, async function(req,res){
-    const userId = req.userId;
-    const courseId = req.body.courseId;
-    const courseexist = await PurchaseModel.find({
-        courseId
-    });
-    const course = courseId.toString
-    if(courseexist){
-        try{
-            const addPurchase = await PurchaseModel.create({
-                userId: userId,
-                courseId: courseId
-            })
-            res.json({
-                message: "You have bought the course"
-            })
-        }
-        catch(e){
-            res.status(403).json({
-                message: "Course couldn't be created"
-            })
-        }
-    }
-    else{
-        res.json({
-            message: "Course doesn't exist"
-        })
-    }
-});
 
 userRouter.get('/my-purchases', UserAuth, async function(req,res){
     const userId = req.userId;
@@ -117,10 +88,11 @@ userRouter.get('/my-purchases', UserAuth, async function(req,res){
     });
 
     const courseData = await CourseModel.find({
-        _id: purchases.map(x => x._id)
+        _id: { $in: purchases.map(x => x.courseId)}
     })
-    res.json({
-        purchases
+    res.json({ 
+        purchases,
+        courseData
     })
 
 });
