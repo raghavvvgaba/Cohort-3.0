@@ -1,0 +1,15 @@
+http protocol does a three way handshake between the browser and the server
+1. Browser wants to connect
+2. Server approves
+3. Broswer connects
+
+
+Websockets and WebRTC creates persistent connections
+
+WebSockets provide a way to establish a persistent, full-duplex communication (two-way communication) channel over a single TCP connection between the client (typically a web browser) and the server.
+
+Server can push you events on it own
+
+
+ChatApp - can use long polling as well, instead of websockets
+//40:58
